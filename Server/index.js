@@ -14,6 +14,7 @@ App.use(express.json());
 
 //Routes
 const membersRouter = require("./Routes/members");
+const loanDataRouter = require("./Routes/loanData");
 
 // Connect to MySQL
 const db = mysql.createConnection({
@@ -29,6 +30,7 @@ db.connect((err) => {
 });
 
 App.use("/api/members", membersRouter(db));
+App.use("/api/loanData", loanDataRouter(db));
 
 App.use((req, res, next) => {
   res.removeHeader("Cross-Origin-Opener-Policy"); // Remove the header

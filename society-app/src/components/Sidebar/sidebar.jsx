@@ -81,7 +81,7 @@ const Sidebar = () => {
             <span className="icon">
               <DynamicIcon iconName="Layers" />
             </span>
-            Products
+            Members
             <span className="arrow">
               <DynamicIcon iconName="KeyboardArrowRight" />
             </span>
@@ -93,13 +93,13 @@ const Sidebar = () => {
           >
             <ul className="submenu">
               <li>
-                <Link to={"/product-list"}>Product List</Link>
+                <Link to={"/member-list"}>Member List</Link>
               </li>
               <li>
-                <Link to={"/product-details"}>Product View</Link>
+                <Link to={"/member-details"}>Member Details</Link>
               </li>
               <li>
-                <Link to={"/product-upload"}>Product Upload</Link>
+                <Link to={"/member-add"}>Add Member</Link>
               </li>
             </ul>
           </div>

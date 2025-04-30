@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { createContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -10,9 +9,9 @@ import {
   Login,
   Registration,
   ForgetPassword,
-  // ProductDetails,
-  // ProductUpload,
   MemberList,
+  MemberDetails,
+  MemberAdd,
   Orders,
   CategoryList,
   CategoryUpload,
@@ -24,7 +23,6 @@ import AuthLayout from "./Layouts/AuthLayouts";
 import LoadingBar from "react-top-loading-bar";
 
 import { Snackbar, Alert } from "@mui/material";
-import { fetchDataFromApi } from "./utils/api";
 
 export const MyContext = createContext();
 
@@ -33,8 +31,6 @@ function App() {
   const [isLogin, setIsLogin] = useState(false);
   const [user, setUser] = useState();
   const [progress, setProgress] = useState(0);
-  const [catData, setCatData] = useState([]);
-  const [products, setProducts] = useState([]);
 
   const [ThemeMode, setThemeMode] = useState(
     () => localStorage.getItem("ThemeMode") || "light"
@@ -45,21 +41,6 @@ function App() {
     error: false,
     open: false,
   });
-
-  const fetchCategory = () => {
-    setProgress(30);
-    fetchDataFromApi("/api/category").then((res) => {
-      setCatData(res);
-      setProgress(100);
-    });
-  };
-  const fetchProducts = () => {
-    setProgress(30);
-    fetchDataFromApi("/api/products/filter").then((res) => {
-      setProducts(res);
-      setProgress(100);
-    });
-  };
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", ThemeMode);
@@ -90,8 +71,6 @@ function App() {
     user,
     progress,
     setProgress,
-    fetchCategory,
-    fetchProducts,
   };
 
   const handleClose = (reason) => {
@@ -159,14 +138,11 @@ function App() {
                     <Routes>
                       <Route path="/" element={<Dashboard />} />
                       <Route
-                        path="/product-details"
-                        // element={<ProductDetails />}
+                        path="/member-details"
+                        element={<MemberDetails />}
                       />
-                      <Route
-                        path="/product-upload"
-                        // element={<ProductUpload />}
-                      />
-                      <Route path="/product-list" element={<MemberList />} />
+                      <Route path="/member-add" element={<MemberAdd />} />
+                      <Route path="/member-list" element={<MemberList />} />
                       <Route path="/category-list" element={<CategoryList />} />
                       <Route
                         path="/category-upload"

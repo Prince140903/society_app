@@ -50,7 +50,7 @@ module.exports = (db) => {
           console.error("Error fetching members:", err);
           return res.status(500).json({ error: err.message }); // Use a valid status code (500 for server error)
         }
-        res.status(200).json(results); // Ensure success status code (200)
+        res.status(200).json({ members: results, totalMembers: totalMembers }); // Ensure success status code (200)
       });
     });
   });

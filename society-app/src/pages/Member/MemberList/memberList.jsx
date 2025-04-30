@@ -27,13 +27,17 @@ const ProductList = () => {
 
   useEffect(() => {
     Context.setProgress(20);
-    fetchDataFromApi(
-      `/api/members/filter?page=${page}&limit=${limit}&search=${searchQuery}&order=${selection}`
-    ).then((res) => {
-      setMembers(res.results);
-      setTotalMembers(res.totalMembers);
-      Context.setProgress(100);
-    });
+    try {
+      fetchDataFromApi(
+        `/api/members/filter?page=${page}&limit=${limit}&search=${searchQuery}&order=${selection}`
+      ).then((res) => {
+        setMembers(res.members);
+        setTotalMembers(res.totalMembers);
+        Context.setProgress(100);
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }, [searchQuery, page, limit, selection]);
 
   const StyledBreadcrumb = styled(Chip)(({ theme }) => {

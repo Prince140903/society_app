@@ -1,8 +1,8 @@
 export { default as Dashboard } from "./Dashboard/dashboard";
 export { default as NotFound } from "./NotFound/notFound";
 export { default as Orders } from "./Orders/orders";
-// export { default as MemberDetails } from "./Member/ProductDetails/productDetails";
-export { default as MemberAdd } from "./Member/ProductUpload/productUpload";
+export { default as MemberDetails } from "./Member/MemberDetails/memberDetails";
+export { default as MemberAdd } from "./Member/MemberAdd/memberAdd";
 export { default as MemberList } from "./Member/MemberList/memberList";
 export { default as CategoryList } from "./Category/CategoryList/categoryList";
 export { default as CategoryUpload } from "./Category/CategoryUpload/categoryUpload";

@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./dashboard.css";
 
 import { Box } from "../../components";
 import { DynamicIcon } from "../../constants";
 import { PieChart } from "@mui/x-charts/PieChart";
+import { MyContext } from "../../App";
 
 import {
   Button,
@@ -13,14 +14,78 @@ import {
   Pagination,
 } from "@mui/material";
 import { fetchDataFromApi } from "../../utils/api";
-import LazyLoad from "react-lazyload";
 
 const Dashboard = () => {
+  const [loanData, setLoanData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selection, setSelection] = useState("DEFAULT");
+  const getDefaultFinancialYear = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth(); // January = 0, April = 3
+
+    if (month >= 4) {
+      // From April to December
+      return `${year}-${year + 1}`;
+    } else {
+      // From January to March
+      return `${year - 1}-${year}`;
+    }
+  };
+
+  const [year, setYear] = useState(getDefaultFinancialYear());
+  const Context = useContext(MyContext);
+
+  useEffect(() => {
+    Context.setProgress(20);
+    try {
+      fetchDataFromApi(
+        `/api/loanData/filter?page=${page}&limit=${limit}&search=${searchQuery}&order=${selection}&year=${year}`
+      ).then((res) => {
+        setLoanData(res.loanData);
+        setTotalRecords(res.totalRecords);
+        Context.setProgress(100);
+      });
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        console.warn("API returned 404: Not Found.");
+        setProducts([]);
+      } else {
+        console.error("Error fetching search results:", error);
+      }
+    }
+  }, [searchQuery, page, limit, selection, year]);
+
   const desktopOS = [
     { id: "Windows", value: 50 },
     { id: "macOS", value: 30 },
     { id: "Linux", value: 20 },
   ];
+
+  const handleSelection = (event) => {
+    setSelection(event.target.value);
+    setPage(1);
+  };
+
+  const handleSearch = (event) => {
+    setSearchQuery(event.target.value);
+    setPage(1);
+  };
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
+
+  const handleLimitChange = (event) => {
+    setLimit(event.target.value);
+  };
+
+  const handleYearChange = (event) => {
+    setYear(event.target.value);
+  };
 
   const valueFormatter = (value) => `${value}%`;
 
@@ -102,18 +167,18 @@ const Dashboard = () => {
               </FormControl>
             </div>
             <div className="col-md-3">
-              <h4>Select Company</h4>
+              <h4>Select Financial Year</h4>
               <FormControl size="small" className="w-100">
                 <Select
                   labelId="select2-label"
                   id="select2"
-                  value={company}
-                  onChange={handleCompanyChange}
+                  value={year}
+                  onChange={handleYearChange}
                   className="w-100 drop"
                 >
-                  <MenuItem value="All">All</MenuItem>
-                  <MenuItem value="Amazon">Amazon</MenuItem>
-                  <MenuItem value="Flipkart">Flipkart</MenuItem>
+                  <MenuItem value="2025-2026">2025-2026</MenuItem>
+                  <MenuItem value="2024-2025">2024-2025</MenuItem>
+                  <MenuItem value="2023-2024">2023-2024</MenuItem>
                 </Select>
               </FormControl>
             </div>
@@ -125,12 +190,11 @@ const Dashboard = () => {
                   id="select3"
                   value={selection}
                   onChange={handleSelection}
-                  className="w-100  drop"
+                  className="w-100 drop"
                 >
-                  <MenuItem value="Featured">Featured</MenuItem>
-                  <MenuItem value="Low->High">Price: Low to High</MenuItem>
-                  <MenuItem value="High->Low">Price: High to Low</MenuItem>
-                  <MenuItem value="Popular">Popular</MenuItem>
+                  <MenuItem value="DEFAULT">Default</MenuItem>
+                  <MenuItem value="ASC">Ascending</MenuItem>
+                  <MenuItem value="DESC">Descending</MenuItem>
                 </Select>
               </FormControl>
             </div>
@@ -152,75 +216,38 @@ const Dashboard = () => {
             <table className="table table-bordered v-align">
               <thead className="thead-dark">
                 <tr>
-                  <th>UID</th>
-                  <th>PRODUCT</th>
-                  <th>COMPANY</th>
-                  <th>CATEGORY</th>
-                  <th>SUB-CATEGORY</th>
-                  <th>PRICE</th>
-                  <th>RATING</th>
-                  <th>SALES</th>
-                  <th>ACTION</th>
+                  <th>DATE</th>
+                  <th>ID</th>
+                  <th>NAME</th>
+                  <th>SHARE MONEY</th>
+                  <th>OPENING DEPOSIT</th>
+                  <th>CUMULATIVE DEPOSIT</th>
+                  <th>M TERM LOAN</th>
+                  <th>E TERM LOAN</th>
+                  <th>INSTALLMENTS</th>
                 </tr>
               </thead>
               <tbody>
-                {products.length !== 0 ? (
-                  products.map((product, index) => (
-                    <tr key={index}>
-                      <td>{(page - 1) * limit + index + 1}</td>
-                      <td>
-                        <div className="d-flex align-items-center productBox">
-                          <div className="imgWrapper">
-                            <div className="img">
-                              <LazyLoad>
-                                <img
-                                  src={
-                                    product.images[0] ||
-                                    "https://i.ibb.co/GQmxxNg/images.png"
-                                  }
-                                  alt="product-img"
-                                  className="w-100"
-                                  onError={(e) => {
-                                    e.target.onError = null;
-                                    e.target.src =
-                                      "https://i.ibb.co/GQmxxNg/images.png";
-                                  }}
-                                />
-                              </LazyLoad>
-                            </div>
-                          </div>
-                          <div className="info">
-                            <h6>{product.name}</h6>
-                            <p>{product.link}</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>{product.company}</td>
-                      <td>{product.main_category}</td>
-                      <td>{product.sub_category}</td>
-                      <td>
-                        <del className="old">₹ {product.actual_price}</del>
-                        <span className="new text-success">
-                          ₹ {product.discount_price}
-                        </span>
-                      </td>
-                      <td>{product.ratings}</td>
-                      <td>{product.no_of_ratings}</td>
-                      <td>
-                        <div className="d-flex actions align-items-center">
-                          <Button color="secondary" className="secondary">
-                            <DynamicIcon iconName="Visibility" />
-                          </Button>
-                          <Button color="success" className="success">
-                            <DynamicIcon iconName="Create" />
-                          </Button>
-                          <Button color="error" className="error">
-                            <DynamicIcon iconName="Delete" />
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                {loanData.length !== 0 ? (
+                  loanData.map((data, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>
+                          {new Date(data.record_date)
+                            .toISOString()
+                            .slice(0, 10)}
+                        </td>
+                        <td>{data.member_id}</td>
+                        <td>{data.name}</td>
+                        <td>{parseInt(data.share_money)}</td>
+                        <td>{parseInt(data.opening_deposit)}</td>
+                        <td>{parseInt(data.cummulative_deposit)}</td>
+                        <td>{parseInt(data.m_term_loan)}</td>
+                        <td>{parseInt(data.e_term_loan)}</td>
+                        <td>{parseInt(data.m_term_installments)}</td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <>
                     <tr>
@@ -233,10 +260,10 @@ const Dashboard = () => {
 
             <div className="d-flex tableFooter">
               <p>
-                showing <b>{products.length}</b> results
+                showing <b>{loanData.length}</b> results
               </p>
               <Pagination
-                count={Math.ceil(totalProducts / limit)}
+                count={Math.ceil(totalRecords / limit)}
                 page={page}
                 onChange={handlePageChange}
                 variant="outlined"

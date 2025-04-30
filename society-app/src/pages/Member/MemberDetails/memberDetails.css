@@ -175,3 +175,28 @@
 h6 {
   font-weight: bold;
 }
+
+.search-dropdown {
+  background: var(--body_background);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-item {
+  padding: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.search-item:nth-child(even) {
+  background: var(--dropdown);
+}
+
+.search-item:hover {
+  background-color: var(--btn_active-color);
+  color: var(--body_background);
+}
+
+.no-results {
+  padding: 8px;
+  color: var(--click);
+}
