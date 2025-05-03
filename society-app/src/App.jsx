@@ -21,6 +21,7 @@ import {
 import { Header, Sidebar, Footer } from "./components";
 import AuthLayout from "./Layouts/AuthLayouts";
 import LoadingBar from "react-top-loading-bar";
+import { fetchDataFromApi } from "./utils/api";
 
 import { Snackbar, Alert } from "@mui/material";
 
@@ -31,10 +32,25 @@ function App() {
   const [isLogin, setIsLogin] = useState(false);
   const [user, setUser] = useState();
   const [progress, setProgress] = useState(0);
+  const [members, setMembers] = useState([]);
+  const [totalMembers, setTotalMembers] = useState(0);
 
   const [ThemeMode, setThemeMode] = useState(
     () => localStorage.getItem("ThemeMode") || "light"
   );
+
+  useEffect(() => {
+    setProgress(20);
+    try {
+      fetchDataFromApi(`/api/members/filter`).then((res) => {
+        setMembers(res.members);
+        setTotalMembers(res.totalMembers);
+        setProgress(100);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
 
   const [alertBox, setAlertBox] = useState({
     msg: "",

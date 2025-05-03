@@ -55,5 +55,48 @@ module.exports = (db) => {
     });
   });
 
+  router.post("/add", (req, res) => {
+    const { name } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ message: "Name is required" });
+    }
+
+    const query = "INSERT INTO members (name) VALUES (?)";
+
+    db.query(query, [name], (err, results) => {
+      if (err) {
+        console.error("Error inserting into database:", err);
+        return res.status(500).json({ message: "Error adding member" });
+      }
+      res
+        .status(200)
+        .json({ message: "Member added successfully", id: results.insertId });
+    });
+  });
+
+  router.delete("/delete", (req, res) => {
+    const { member_id } = req.body;
+
+    if (!member_id) {
+      return res.status(400).json({ message: "Member ID is required" });
+    }
+
+    const query = "DELETE FROM members WHERE member_id = (?)";
+
+    db.query(query, [member_id], (err, results) => {
+      if (err) {
+        console.error("Error deleting member:", err);
+        return res.status(500).json({ message: "Error deleting member" });
+      }
+
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ message: "Member not found" });
+      }
+
+      res.status(200).json({ message: "Member deleted successfully" });
+    });
+  });
+
   return router;
 };

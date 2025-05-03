@@ -30,8 +30,8 @@ export const uploadImage = async (url, formData) => {
   }
 };
 
-export const deleteData = async (url) => {
-  const res = await axios.delete(`${baseUrl}${url}`, params);
+export const deleteData = async (url, data) => {
+  const res = await axios.delete(`${baseUrl}${url}`, { data });
   return res.data;
 };
 

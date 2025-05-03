@@ -139,7 +139,7 @@ const MemberDetails = () => {
     <>
       <div className="w-100 right-content">
         <div className="card shadow border-0 w-100 flex-row p-4 m-0">
-          <h5 className="mb-0">Product View</h5>
+          <h5 className="mb-0">Member View</h5>
           <Breadcrumbs aria-label="breadcrumb" className="ml-auto breadcrumbs_">
             <StyledBreadcrumb
               component="a"
@@ -149,13 +149,13 @@ const MemberDetails = () => {
             />
             <StyledBreadcrumb
               component="a"
-              href="/product-list"
-              label="Product"
+              href="/member-list"
+              label="Member"
             />
             <StyledBreadcrumb
               component="a"
-              href="/product-details"
-              label="Product View"
+              href="/member-details"
+              label="Member View"
             />
           </Breadcrumbs>
         </div>
@@ -230,68 +230,70 @@ const MemberDetails = () => {
             </div>
           </div>
 
-          <h3 className="hd pt-4">Member Details</h3>
-          <div className="table-responsive mt-3">
-            {activeMember && (
-              <table className="table table-bordered v-align">
-                <thead className="thead-dark">
-                  <tr>
-                    <th>DATE</th>
-                    <th>ID</th>
-                    <th>NAME</th>
-                    <th>SHARE MONEY</th>
-                    <th>OPENING DEPOSIT</th>
-                    <th>CUMULATIVE DEPOSIT</th>
-                    <th>M TERM LOAN</th>
-                    <th>E TERM LOAN</th>
-                    <th>INSTALLMENTS</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {activeMemberData ? (
-                    activeMemberData.map((data, index) => (
-                      <tr key={index}>
-                        <td>
-                          {new Date(data.record_date)
-                            .toISOString()
-                            .slice(0, 10)}
-                        </td>
-                        <td>{data.member_id}</td>
-                        <td>{data.name}</td>
-                        <td>{parseInt(data.share_money)}</td>
-                        <td>{parseInt(data.opening_deposit)}</td>
-                        <td>{parseInt(data.cummulative_deposit)}</td>
-                        <td>{parseInt(data.m_term_loan)}</td>
-                        <td>{parseInt(data.e_term_loan)}</td>
-                        <td>{parseInt(data.m_term_installments)}</td>
-                      </tr>
-                    ))
-                  ) : (
+          {activeMember && (
+            <>
+              <h3 className="hd pt-4">Member Details</h3>
+              <div className="table-responsive mt-3">
+                <table className="table table-bordered v-align">
+                  <thead className="thead-dark">
                     <tr>
-                      <td>No Data Found</td>
+                      <th>DATE</th>
+                      <th>ID</th>
+                      <th>NAME</th>
+                      <th>SHARE MONEY</th>
+                      <th>OPENING DEPOSIT</th>
+                      <th>CUMULATIVE DEPOSIT</th>
+                      <th>M TERM LOAN</th>
+                      <th>E TERM LOAN</th>
+                      <th>INSTALLMENTS</th>
                     </tr>
-                  )}
-                </tbody>
-              </table>
-            )}
-          </div>
+                  </thead>
+                  <tbody>
+                    {activeMemberData ? (
+                      activeMemberData.map((data, index) => (
+                        <tr key={index}>
+                          <td>
+                            {new Date(data.record_date)
+                              .toISOString()
+                              .slice(0, 10)}
+                          </td>
+                          <td>{data.member_id}</td>
+                          <td>{data.name}</td>
+                          <td>{parseInt(data.share_money)}</td>
+                          <td>{parseInt(data.opening_deposit)}</td>
+                          <td>{parseInt(data.cummulative_deposit)}</td>
+                          <td>{parseInt(data.m_term_loan)}</td>
+                          <td>{parseInt(data.e_term_loan)}</td>
+                          <td>{parseInt(data.m_term_installments)}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td>No Data Found</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
 
-          <div className="d-flex tableFooter">
-            <p>
-              showing <b>{activeMemberData && activeMemberData.length}</b>{" "}
-              results
-            </p>
-            <Pagination
-              count={Math.ceil(totalRecords / limit)}
-              page={page}
-              onChange={handlePageChange}
-              variant="outlined"
-              color="primary"
-              showFirstButton
-              showLastButton
-              className="ml-auto"
-            />
-          </div>
+              <div className="d-flex tableFooter">
+                <p>
+                  showing <b>{activeMemberData && activeMemberData.length}</b>{" "}
+                  results
+                </p>
+                <Pagination
+                  count={Math.ceil(totalRecords / limit)}
+                  page={page}
+                  onChange={handlePageChange}
+                  variant="outlined"
+                  color="primary"
+                  showFirstButton
+                  showLastButton
+                  className="ml-auto"
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
     </>

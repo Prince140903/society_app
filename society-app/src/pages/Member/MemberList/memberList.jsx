@@ -12,15 +12,16 @@ import {
   Select,
   MenuItem,
   Pagination,
+  Button,
 } from "@mui/material";
 import { fetchDataFromApi, deleteData } from "../../../utils/api";
 import { MyContext } from "../../../App";
 
-const ProductList = () => {
+const MemberList = () => {
   const [members, setMembers] = useState([]);
+  const [totalMembers, setTotalMembers] = useState(0);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [totalMembers, setTotalMembers] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [selection, setSelection] = useState("DEFAULT");
   const Context = useContext(MyContext);
@@ -78,26 +79,33 @@ const ProductList = () => {
     setLimit(event.target.value);
   };
 
-  // const deleteProd = (id) => {
-  //   Context.setProgress(30);
-  //   deleteData(`/api/products/${id}`)
-  //     .then((res) => {
-  //       Context.setProgress(100);
-  //       fetchDataFromApi("/api/products/filter").then((res) => {
-  //         setProducts(res.products);
-  //         setPage(1);
-  //         Context.setProgress(100);
-  //         Context.setAlertBox({
-  //           open: true,
-  //           error: false,
-  //           msg: "Product Deleted!",
-  //         });
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error deleting category:", error);
-  //     });
-  // };
+  const deleteMem = (id) => {
+    Context.setProgress(30);
+
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this member?"
+    );
+    if (!confirmDelete) return;
+
+    deleteData(`/api/members/delete`, { member_id: id })
+      .then((res) => {
+        Context.setProgress(100);
+        fetchDataFromApi(
+          `/api/members/filter?page=${page}&limit=${limit}&search=${searchQuery}&order=${selection}`
+        ).then((res) => {
+          setMembers(res);
+          Context.setProgress(100);
+          Context.setAlertBox({
+            open: true,
+            error: false,
+            msg: "Member Deleted!",
+          });
+        });
+      })
+      .catch((error) => {
+        console.error("Error deleting member:", error);
+      });
+  };
 
   return (
     <>
@@ -113,13 +121,13 @@ const ProductList = () => {
             />
             <StyledBreadcrumb
               component="a"
-              href="/product-list"
-              label="Product"
+              href="/member-list"
+              label="Member"
             />
             <StyledBreadcrumb
               component="a"
-              href="/product-list"
-              label="Product List"
+              href="/member-list"
+              label="Member List"
             />
           </Breadcrumbs>
         </div>
@@ -210,15 +218,31 @@ const ProductList = () => {
                 <tr>
                   <th>MEMBER_ID</th>
                   <th>MEMBER NAME</th>
+                  <th>ACTION</th>
                 </tr>
               </thead>
               <tbody>
                 {members?.length !== 0 ? (
                   members?.map((member) => {
                     return (
-                      <tr key={member.member_id}>
+                      <tr key={member.member_id} style={{ width: "10%" }}>
                         <td>{member.member_id}</td>
                         <td>{member.name}</td>
+                        <td style={{ width: "20%" }}>
+                          <Button color="secondary" className="secondary">
+                            <DynamicIcon iconName="Visibility" />
+                          </Button>
+                          <Button color="success" className="success">
+                            <DynamicIcon iconName="Create" />
+                          </Button>
+                          <Button
+                            color="error"
+                            className="error"
+                            onClick={() => deleteMem(member.member_id)}
+                          >
+                            <DynamicIcon iconName="Delete" />
+                          </Button>
+                        </td>
                       </tr>
                     );
                   })
@@ -256,4 +280,4 @@ const ProductList = () => {
   );
 };
 
-export default ProductList;
+export default MemberList;
