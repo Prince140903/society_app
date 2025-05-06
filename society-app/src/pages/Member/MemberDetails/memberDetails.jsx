@@ -34,9 +34,9 @@ const MemberDetails = () => {
   const [activeMemberData, setActiveMemberData] = useState();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [year, setYear] = useState(getDefaultFinancialYear() || "");
   const [totalRecords, setTotalRecords] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
-  const [year, setYear] = useState(getDefaultFinancialYear() || "");
 
   useEffect(() => {
     const fetchMembers = async () => {
@@ -245,7 +245,8 @@ const MemberDetails = () => {
                       <th>CUMULATIVE DEPOSIT</th>
                       <th>M TERM LOAN</th>
                       <th>E TERM LOAN</th>
-                      <th>INSTALLMENTS</th>
+                      <th>M INSTALLMENTS</th>
+                      <th>E INSTALLMENTS</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -265,6 +266,7 @@ const MemberDetails = () => {
                           <td>{parseInt(data.m_term_loan)}</td>
                           <td>{parseInt(data.e_term_loan)}</td>
                           <td>{parseInt(data.m_term_installments)}</td>
+                          <td>{parseInt(data.e_term_installments)}</td>
                         </tr>
                       ))
                     ) : (

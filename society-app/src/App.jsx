@@ -13,8 +13,7 @@ import {
   MemberDetails,
   MemberAdd,
   Orders,
-  CategoryList,
-  CategoryUpload,
+  AddRecords,
   SubCategoryList,
   SubCategoryUpload,
 } from "./pages";
@@ -159,11 +158,7 @@ function App() {
                       />
                       <Route path="/member-add" element={<MemberAdd />} />
                       <Route path="/member-list" element={<MemberList />} />
-                      <Route path="/category-list" element={<CategoryList />} />
-                      <Route
-                        path="/category-upload"
-                        element={<CategoryUpload />}
-                      />
+                      <Route path="/add-records" element={<AddRecords />} />
                       <Route
                         path="/subcategory-list"
                         element={<SubCategoryList />}

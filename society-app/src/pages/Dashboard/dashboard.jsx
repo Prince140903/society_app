@@ -224,7 +224,8 @@ const Dashboard = () => {
                   <th>CUMULATIVE DEPOSIT</th>
                   <th>M TERM LOAN</th>
                   <th>E TERM LOAN</th>
-                  <th>INSTALLMENTS</th>
+                  <th>M INSTALLMENTS</th>
+                  <th>E INSTALLMENTS</th>
                 </tr>
               </thead>
               <tbody>
@@ -245,6 +246,7 @@ const Dashboard = () => {
                         <td>{parseInt(data.m_term_loan)}</td>
                         <td>{parseInt(data.e_term_loan)}</td>
                         <td>{parseInt(data.m_term_installments)}</td>
+                        <td>{parseInt(data.e_term_installments)}</td>
                       </tr>
                     );
                   })

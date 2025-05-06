@@ -13,6 +13,7 @@ import {
   MenuItem,
   Pagination,
   Button,
+  Tooltip,
 } from "@mui/material";
 import { fetchDataFromApi, deleteData } from "../../../utils/api";
 import { MyContext } from "../../../App";
@@ -225,23 +226,29 @@ const MemberList = () => {
                 {members?.length !== 0 ? (
                   members?.map((member) => {
                     return (
-                      <tr key={member.member_id} style={{ width: "10%" }}>
-                        <td>{member.member_id}</td>
+                      <tr key={member.member_id}>
+                        <td  style={{ width: "10%" }}>{member.member_id}</td>
                         <td>{member.name}</td>
                         <td style={{ width: "20%" }}>
-                          <Button color="secondary" className="secondary">
-                            <DynamicIcon iconName="Visibility" />
-                          </Button>
-                          <Button color="success" className="success">
-                            <DynamicIcon iconName="Create" />
-                          </Button>
-                          <Button
-                            color="error"
-                            className="error"
-                            onClick={() => deleteMem(member.member_id)}
-                          >
-                            <DynamicIcon iconName="Delete" />
-                          </Button>
+                          <Tooltip title="View">
+                            <Button color="secondary" className="secondary">
+                              <DynamicIcon iconName="Visibility" />
+                            </Button>
+                          </Tooltip>
+                          <Tooltip title="Create">
+                            <Button color="success" className="success">
+                              <DynamicIcon iconName="Create" />
+                            </Button>
+                          </Tooltip>
+                          <Tooltip title="Delete">
+                            <Button
+                              color="error"
+                              className="error"
+                              onClick={() => deleteMem(member.member_id)}
+                            >
+                              <DynamicIcon iconName="Delete" />
+                            </Button>
+                          </Tooltip>
                         </td>
                       </tr>
                     );

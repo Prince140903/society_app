@@ -63,6 +63,11 @@ body {
   color: #fff !important;
 }
 
+.btn-blue.disabled {
+  background: gray !important;
+  color: white !important;
+}
+
 h1,
 h2,
 h3,

@@ -112,7 +112,7 @@ const Sidebar = () => {
             <span className="icon">
               <DynamicIcon iconName="Layers" />
             </span>
-            Category
+            Records
             <span className="arrow">
               <DynamicIcon iconName="KeyboardArrowRight" />
             </span>
@@ -124,10 +124,10 @@ const Sidebar = () => {
           >
             <ul className="submenu">
               <li>
-                <Link to={"/category-list"}>Category List</Link>
+                <Link to={"/add-records"}>Add Records</Link>
               </li>
               <li>
-                <Link to={"/category-upload"}>Category Upload</Link>
+                <Link to={"/category-upload"}>Modify Records</Link>
               </li>
             </ul>
           </div>

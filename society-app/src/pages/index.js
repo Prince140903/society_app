@@ -1,6 +1,7 @@
 export { default as Dashboard } from "./Dashboard/dashboard";
 export { default as NotFound } from "./NotFound/notFound";
 export { default as Orders } from "./Orders/orders";
+export { default as AddRecords } from "./Records/Add_Record/addRecords";
 export { default as MemberDetails } from "./Member/MemberDetails/memberDetails";
 export { default as MemberAdd } from "./Member/MemberAdd/memberAdd";
 export { default as MemberList } from "./Member/MemberList/memberList";

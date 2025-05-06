@@ -31,6 +31,7 @@ module.exports = (db) => {
       m_term_loan, 
       m_term_installments, 
       e_term_loan, 
+      e_term_installments, 
       share_money, 
       DATE(record_date) as record_date 
     FROM monthlyrecords 
